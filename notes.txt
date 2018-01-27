@@ -1,0 +1,18 @@
+Round:
+Lasts for 30 secs
+
+The board spawns at least 10 elements in a random position
+	Each element must not overlap
+
+When the user types each element fill it's text this way:
+	Green - if an element with the same name exists already on the board
+	Red - if it's the only element in the board
+	
+Review: the board can't have more than 2 of the same word.
+
+Each element stays on the screen for a number of seconds of 2 * length of the word, then fades
+When an element fades, it is substituted by another one.
+
+
+Iteration 1:
+Have 10 elements to spawn at random, with a time limit each. When the timer expires, they are substituted.
