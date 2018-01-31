@@ -25,6 +25,8 @@ public:
 	int32 UsedIndex;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	int32 MaxSpawns;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	float CardLifetimeMultiplier;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Gameplay)
 	TArray<FCardEntry> SpawnedCards;
 
@@ -36,6 +38,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
 	void OnCardSpawn(const FCardEntry& entry);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
+	void OnCardUpdate(int32 cardIndex, float normalizedLifetime);
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
 	void OnCardDeleted(int32 cardIndex);
 };

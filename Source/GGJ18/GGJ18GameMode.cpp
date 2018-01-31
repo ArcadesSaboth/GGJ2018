@@ -6,6 +6,8 @@
 #include "UObject/ConstructorHelpers.h"
 
 AGGJ18GameMode::AGGJ18GameMode()
+	: CardLifetimeMultiplier(2.f)
+	, ParseDelimiter(TEXT(","))
 {
 	// use our custom PlayerController class
 	PlayerControllerClass = AGGJ18PlayerController::StaticClass();
@@ -16,8 +18,6 @@ AGGJ18GameMode::AGGJ18GameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
-
-	ParseDelimiter = TEXT(",");
 }
 
 void AGGJ18GameMode::BeginPlay()
@@ -36,12 +36,13 @@ void AGGJ18GameMode::Tick(float DeltaTime)
 		FCardEntry& iter = SpawnedCards[i];
 		iter.Tick(DeltaTime);
 
+		OnCardUpdate(iter.Index, iter.GetNormalizedLifetime());
+
 		if (iter.IsExpired())
 		{
 			OnCardDeleted(iter.Index);
+			SpawnedCards.RemoveAt(i);
 		}
-
-		SpawnedCards.RemoveAt(i);
 	}
 
 	SpawnCards();
@@ -64,12 +65,12 @@ void AGGJ18GameMode::SpawnCards()
 	int32 spawned = SpawnedCards.Num();
 	for (int32 i = spawned; i < MaxSpawns; i++)
 	{
-		int32 choosen = FMath::RandRange(0, WordDabase.Num());
+		int32 choosen = FMath::RandRange(0, WordDabase.Num() - 1);
 
 		FCardEntry entry;
 		entry.Word = WordDabase[choosen];
 		entry.Index = UsedIndex++;
-		entry.Lifetime = entry.Word.Len() * 2.f;
+		entry.Lifetime = entry.Word.Len() * CardLifetimeMultiplier;
 
 		SpawnedCards.Add(entry);
 

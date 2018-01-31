@@ -19,8 +19,8 @@ struct FCardEntry
 	float Lifetime;
 
 	void Tick(float dt);
-
 	float GetCurrentTime() const;
+	float GetNormalizedLifetime() const;
 	bool IsExpired() const;
 private:
 	float m_timer;
