@@ -1,8 +1,11 @@
 #include "CardEntry.h"
+#include "TextUtils.h"
 
 
 FCardEntry::FCardEntry()
 	: m_timer(0.f)
+	, HighlightedCharacters(0)
+	, Index(0)
 {
 	
 }
@@ -15,6 +18,12 @@ void FCardEntry::Tick(float dt)
 bool FCardEntry::IsExpired() const
 {
 	return m_timer > Lifetime;
+}
+
+
+void FCardEntry::CalculateMatchingChars(const FString& text)
+{
+	HighlightedCharacters = UTextUtils::CountSimilarTextes(Word, text);
 }
 
 float FCardEntry::GetCurrentTime() const

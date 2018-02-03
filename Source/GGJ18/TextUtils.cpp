@@ -3,7 +3,7 @@
 #include "TextUtils.h"
 
 
-int32 UTextUtils::CountSimilarTextes(UPARAM(ref) FString& first, UPARAM(ref) FString& second)
+int32 UTextUtils::CountSimilarTextes(const FString& first, const FString& second)
 {
 	const int32 firstLength = first.Len();
 	const int32 secondLength = second.Len();

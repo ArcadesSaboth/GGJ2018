@@ -14,6 +14,7 @@ class GGJ18_API UTextUtils : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
+public:
 	UFUNCTION(BlueprintCallable, Category = TextUtils)
-	static int32 CountSimilarTextes(UPARAM(ref) FString& first, UPARAM(ref) FString& second);
+	static int32 CountSimilarTextes(const FString& first, const FString& second);
 };

@@ -36,10 +36,12 @@ public:
 	void AutoParseWords();
 	void SpawnCards();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
+	UFUNCTION(BlueprintImplementableEvent, Category = Gameplay)
 	void OnCardSpawn(const FCardEntry& entry);
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
-	void OnCardUpdate(int32 cardIndex, float normalizedLifetime);
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Gameplay)
+	UFUNCTION(BlueprintImplementableEvent, Category = Gameplay)
+	void OnCardUpdate(const FCardEntry& entry);
+	UFUNCTION(BlueprintImplementableEvent, Category = Gameplay)
 	void OnCardDeleted(int32 cardIndex);
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void OnTextEntry(const FString& text);
 };

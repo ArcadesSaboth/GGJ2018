@@ -18,10 +18,18 @@ struct FCardEntry
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Lifetime;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 HighlightedCharacters;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool Matching;
+
 	void Tick(float dt);
 	float GetCurrentTime() const;
 	float GetNormalizedLifetime() const;
 	bool IsExpired() const;
+
+	void CalculateMatchingChars(const FString& text);
 private:
 	float m_timer;
 };

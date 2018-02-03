@@ -36,7 +36,7 @@ void AGGJ18GameMode::Tick(float DeltaTime)
 		FCardEntry& iter = SpawnedCards[i];
 		iter.Tick(DeltaTime);
 
-		OnCardUpdate(iter.Index, iter.GetNormalizedLifetime());
+		OnCardUpdate(iter);
 
 		if (iter.IsExpired())
 		{
@@ -75,5 +75,36 @@ void AGGJ18GameMode::SpawnCards()
 		SpawnedCards.Add(entry);
 
 		OnCardSpawn(entry);
+	}
+}
+
+void AGGJ18GameMode::OnTextEntry(const FString& text)
+{
+	// There must be a smarter way to do this...
+	for (auto&& iter : SpawnedCards)
+	{
+		iter.CalculateMatchingChars(text);
+		iter.Matching = false;
+	}
+
+	for (int32 i = 0; i < SpawnedCards.Num(); i++)
+	{
+		if (SpawnedCards[i].HighlightedCharacters == 0)
+		{
+			continue;
+		}
+
+		for (int32 j = i + 1; j < SpawnedCards.Num(); j++)
+		{
+			if (SpawnedCards[j].HighlightedCharacters == 0)
+			{
+				continue;
+			}
+
+			if (SpawnedCards[i].Word.Compare(SpawnedCards[j].Word) == 0)
+			{
+				SpawnedCards[i].Matching = SpawnedCards[j].Matching = true;
+			}
+		}
 	}
 }
