@@ -30,11 +30,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Gameplay)
 	TArray<FCardEntry> SpawnedCards;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int32 TotalScore;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	int32 ScoreForMatching;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	int32 ScoreForFail;
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-
-	void AutoParseWords();
-	void SpawnCards();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Gameplay)
 	void OnCardSpawn(const FCardEntry& entry);
@@ -44,4 +48,12 @@ public:
 	void OnCardDeleted(int32 cardIndex);
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void OnTextEntry(const FString& text);
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void Score();
+
+private:
+	void AutoParseWords();
+	void SpawnCards();
+
+	void OnPreCardDelete(const FCardEntry& card, const bool addNegativeScore = true);
 };

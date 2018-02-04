@@ -22,11 +22,7 @@ Have 10 elements to spawn at random, with a time limit each. When the timer expi
 2) If a card expires and has more than zero level, it resets the input																		V
 3) If two or cards have a match, they became green																							V
 4) If there is only one card, it is red																										V
-5) When the user press ENTERS and there is at least one match, he gets a point for each match. Each non matching card is just discarded.	X
-6) When the input is reset, for each non-matching card, the user loses points																X
+5) When the user press ENTERS and there is at least one match, he gets a point for each match. Each non matching card is just discarded.	V
+6) When the input is reset, for each non-matching card, the user loses points																V
 7) Create a Round sequence.
 8) They must not overlap!
-
-
-
-stoca, boh stoca

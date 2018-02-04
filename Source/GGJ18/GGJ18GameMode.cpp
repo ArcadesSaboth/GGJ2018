@@ -8,6 +8,9 @@
 AGGJ18GameMode::AGGJ18GameMode()
 	: CardLifetimeMultiplier(2.f)
 	, ParseDelimiter(TEXT(","))
+	, TotalScore(0)
+	, ScoreForMatching(500)
+	, ScoreForFail(100)
 {
 	// use our custom PlayerController class
 	PlayerControllerClass = AGGJ18PlayerController::StaticClass();
@@ -40,7 +43,7 @@ void AGGJ18GameMode::Tick(float DeltaTime)
 
 		if (iter.IsExpired())
 		{
-			OnCardDeleted(iter.Index);
+			OnPreCardDelete(iter);
 			SpawnedCards.RemoveAt(i);
 		}
 	}
@@ -78,13 +81,30 @@ void AGGJ18GameMode::SpawnCards()
 	}
 }
 
+
+void AGGJ18GameMode::OnPreCardDelete(const FCardEntry& card, const bool addNegativeScore)
+{
+	if (addNegativeScore && card.HighlightedCharacters > 0 && !card.Matching)
+	{
+		TotalScore -= ScoreForFail;
+	}
+
+	OnCardDeleted(card.Index);
+}
+
 void AGGJ18GameMode::OnTextEntry(const FString& text)
 {
+	bool atLeastOneCompleted = false;
 	// There must be a smarter way to do this...
 	for (auto&& iter : SpawnedCards)
 	{
 		iter.CalculateMatchingChars(text);
 		iter.Matching = false;
+
+		if (iter.HighlightedCharacters == iter.Word.Len())
+		{
+			atLeastOneCompleted = true;
+		}
 	}
 
 	for (int32 i = 0; i < SpawnedCards.Num(); i++)
@@ -106,5 +126,45 @@ void AGGJ18GameMode::OnTextEntry(const FString& text)
 				SpawnedCards[i].Matching = SpawnedCards[j].Matching = true;
 			}
 		}
+	}
+
+	if (atLeastOneCompleted)
+	{
+		Score();
+	}
+}
+
+void AGGJ18GameMode::Score()
+{
+	int32 totalAdded = 0;
+	int32 totalFail = 0;
+	// If a card is matching
+	// 
+	for (int i = SpawnedCards.Num() - 1; i >= 0; i--)
+	{
+		if (SpawnedCards[i].HighlightedCharacters > 0)
+		{
+			if (!SpawnedCards[i].Matching)
+			{
+				totalFail += ScoreForFail;
+			}
+			else if (SpawnedCards[i].HighlightedCharacters == SpawnedCards[i].Word.Len())
+			{
+				totalAdded += ScoreForMatching;
+			}
+
+			OnPreCardDelete(SpawnedCards[i], false);
+			SpawnedCards.RemoveAt(i);
+		}
+	}
+
+	// If we have at least one match, we add points and discard all the failures
+	if (totalAdded > 0)
+	{
+		TotalScore += totalAdded;
+	}
+	else // However, if we have no match, then we add the total failures.
+	{
+		TotalScore -= totalFail;
 	}
 }
